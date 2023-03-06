@@ -20,7 +20,6 @@ func Translate(text string) string {
 	if err != nil {
 		log.Println(err)
 	}
-	//log.Printf("%q\n", data)
 
 	return string(data)
 }

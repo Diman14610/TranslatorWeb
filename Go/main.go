@@ -11,6 +11,16 @@ import (
 )
 
 func main() {
+	if _, err := os.Stat("./source"); os.IsNotExist(err) {
+		os.Mkdir("./source", os.FileMode(0522))
+	}
+	if _, err := os.Stat("./source/text"); os.IsNotExist(err) {
+		os.Mkdir("./source/text", os.FileMode(0522))
+	}
+	if _, err := os.Stat("./source/img"); os.IsNotExist(err) {
+		os.Mkdir("./source/img", os.FileMode(0522))
+	}
+
 	router := gin.Default()
 	router.Use(CORSMiddleware())
 
