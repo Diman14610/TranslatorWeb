@@ -1,11 +1,21 @@
 # TranslatorWeb
 
-## Установка
+## Установка через бат файл
+---
+1. Запустить `extractor.bat`, после открывшегося окна выбрать extractor.py и нажать convert to exe. Затем скачать и установить [tesseract](https://github.com/UB-Mannheim/tesseract/wiki) по пути Python\Extractor\lib\Tesseract (надо самому создать папки, если нету)
+2. Запустить `translator.bat`, после открывшегося окна выбрать translator.py и нажать convert to exe
+3. Перейти по пути TranslatorWeb\Go
+4. Запустить powershell
+5. `go get .`
+6. `go run .`
+
+## Установка без бат файла
+---
 ### Extractor
 1. Перейти по пути TranslatorWeb\Python\Extractor
 2. Запустить powershell
 3. `python -m venv venv`
-4. Затем активировать внутренную среду в venv
+4. Затем внутреннюю внутренную среду в venv
 5. `pip install -r "requirements.txt"`
 6. `auto-py-to-exe`
 7. Выбрать main.py и сгенерировать exe
@@ -16,7 +26,7 @@
 1. Перейти по пути TranslatorWeb\Python\Translator
 2. Запустить powershell
 3. `python -m venv venv`
-4. Затем активировать внутренную среду в venv
+4. Затем активировать внутреннюю среду в venv
 5. `pip install -r "requirements.txt"`
 6. `auto-py-to-exe`
 7. Выбрать main.py и сгенерировать exe
