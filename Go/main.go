@@ -34,7 +34,7 @@ func main() {
 	router.GET("/text/:text", handlerText)
 
 	router.StaticFS("/static", http.Dir("web/static"))
-	err := router.Run(":8070")
+	err := router.Run(Config.Host)
 	if err != nil {
 		log.Fatalln("Start HTTP Server error", err)
 	}
@@ -60,7 +60,6 @@ func CORSMiddleware() gin.HandlerFunc {
 func indexPage(c *gin.Context) {
 	files, err := os.ReadDir("./source/text/")
 	var texts []string
-
 	for _, v := range files {
 		texts = append(texts, v.Name())
 	}
@@ -82,8 +81,7 @@ func helloPage(c *gin.Context) {
 
 func handlerImg(c *gin.Context) {
 	// single file
-	file, _ := c.FormFile("imageFile")
-
+	file, _ := c.FormFile("image")
 	if !strings.HasPrefix(file.Header.Get("Content-Type"), "image") {
 		log.Println("Error! Input file not image/png")
 		return

@@ -1,0 +1,6 @@
+{
+    "host": "8070",
+    "translator_path": "../Python/Extractor/output/extractor/extractor.exe",
+    "extractor_path": "../Python/Translator/output/translator/translator.exe",
+    "exec_name": "powershell"
+}
