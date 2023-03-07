@@ -8,7 +8,7 @@ import (
 
 func Translate(text string) string {
 	t := "-t=" + "\"" + text + "\""
-	pathToExtractor := "../Python/Translator/output/main/main.exe"
+	pathToExtractor := "../Python/Translator/output/translator/translator.exe"
 	cmd := exec.Command("powershell", pathToExtractor, t)
 
 	out, err := cmd.Output()

@@ -15,7 +15,7 @@ func ExtractText(path string) string {
 
 	f := "-f=" + "\"" + fileName + "\""
 	l := "-l=" + "\"" + "eng" + "\""
-	pathToExtractor := "../Python/Extractor/output/main/main.exe"
+	pathToExtractor := "../Python/Extractor/output/extractor/extractor.exe"
 	cmd := exec.Command("powershell", pathToExtractor, f, l)
 
 	out, err := cmd.Output()
