@@ -2,8 +2,8 @@
 
 ## Установка через бат файл
 ---
-1. Запустить `extractor.bat`, после открывшегося окна выбрать extractor.py и нажать convert to exe. Затем скачать и установить [tesseract](https://github.com/UB-Mannheim/tesseract/wiki) по пути Python\Extractor\lib\Tesseract (надо самому создать папки, если нету)
-2. Запустить `translator.bat`, после открывшегося окна выбрать translator.py и нажать convert to exe
+1. Запустить `extractor.bat`, после открывшегося окна выбрать extractor.py и нажать convert .py to .exe. Затем скачать и установить [tesseract](https://github.com/UB-Mannheim/tesseract/wiki) по пути Python\Extractor\lib\Tesseract (надо самому создать папки, если нету)
+2. Запустить `translator.bat`, после открывшегося окна выбрать translator.py и нажать convert .py to .exe
 3. Перейти по пути TranslatorWeb\Go
 4. Запустить powershell
 5. `go get .`
