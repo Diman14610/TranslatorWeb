@@ -1,9 +1,11 @@
 package main
 
 import (
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -27,9 +29,8 @@ func main() {
 		router.LoadHTMLGlob("web/templates/*")
 		router.GET("/", indexPage)
 	}
-
 	router.POST("/load", handleImg)
-	router.GET("/text/:name", handleText)
+	router.GET("/text/:folder/:name", handleText)
 
 	router.StaticFS("/static", http.Dir("web/static"))
 	err := router.Run(Config.Host)
@@ -56,17 +57,30 @@ func CORSMiddleware() gin.HandlerFunc {
 }
 
 func indexPage(c *gin.Context) {
-	files, err := os.ReadDir("./source/text/")
-	var links []string
-	for _, f := range files {
-		links = append(links, f.Name())
+	files := make(map[string][]string)
+	nameNewFolder := ""
+	e := filepath.Walk("./source/text/.", func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		name := info.Name()
+		if name == "." {
+			return nil
+		}
+		if strings.HasSuffix(name, ".txt") {
+			files[nameNewFolder] = append(files[nameNewFolder], name)
+		} else {
+			nameNewFolder = name
+			files[nameNewFolder] = make([]string, 0)
+		}
+		return nil
+	})
+	if e != nil {
+		log.Fatal(e)
 	}
 
-	if err != nil {
-		log.Fatal(err)
-	}
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
-		"links": links,
+		"links": files,
 	})
 }
 
@@ -88,8 +102,9 @@ func handleImg(c *gin.Context) {
 }
 
 func handleText(c *gin.Context) {
+	f := c.Param("folder")
 	t := c.Param("name")
-	content, _ := os.ReadFile("./source/text/" + t)
+	content, _ := os.ReadFile("./source/text/" + f + "/" + t)
 	c.HTML(http.StatusOK, "text.tmpl", gin.H{
 		"content": string(content),
 	})

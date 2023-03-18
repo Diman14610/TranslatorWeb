@@ -7,31 +7,77 @@
     <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <link rel="stylesheet" href="static/css/bootstrap.min.css">
-    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/bootstrap.js"></script>
 </head>
 
 <body class="container p-3" style="font-size: 18px;display: flex;gap: 10px;justify-content: center;">
-    <div>
-        <form class="row" enctype="multipart/form-data" action="/load" method="post">
-            <h3>Перевести картинку</h3>
+    <div style="display: grid; grid-template-columns: 1fr 500px;">
+        <div>
+            <form class="row" enctype="multipart/form-data" action="/load" method="post">
+                <h3>Перевести картинку</h3>
 
-            <div class="col-8">
-                <input class="form-control" type="file" name="image" />
+                <div class="col-8">
+                    <input class="form-control" type="file" name="image" />
+                </div>
+
+                <div class="col-3">
+                    <input type="submit" class="btn btn-warning w-100" value="Перевести" />
+                </div>
+
+                <div class="col-auto d-flex gap-2 mt-2">
+                    <span class="h5">с</span>
+                    <select class="form-select form-select-sm" aria-label="Default select example">
+                        <option value="en" selected>EN</option>
+                        <option value="ru">RU</option>
+                    </select>
+                    <span class="h5">на</span>
+                    <select class="form-select form-select-sm" aria-label="Default select example">
+                        <option value="ru" selected>RU</option>
+                        <option value="en">EN</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        <div>
+            <h3>Прошлые переводы</h3>
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                {{ range $key, $value := .links }}
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="{{ $key }}-tab" data-toggle="tab" href="#{{ $key }}" role="tab"
+                        aria-controls="{{ $key }}" aria-selected="true">{{ $key }}</a>
+                </li>
+                {{ end }}
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                {{ range $key, $value := .links }}
+                <div class="tab-pane fade show" id="{{ $key }}" role="tabpanel" aria-labelledby="{{ $key }}-tab">
+                    <div class="list-group">
+                        {{ range $value }}
+                            <a class="list-group-item list-group-item-action" href="/text/{{ $key }}/{{ . }}"> {{ . }} </a>
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
             </div>
 
-            <div class="col-4">
-                <input type="submit" class="btn btn-warning" value="Перевести" />
-            </div>
-        </form>
+        </div>
     </div>
 
-    <div class="list-group">
-        <h3>Прошлые переводы</h3>
+    <script>
+        var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
+        triggerTabList.forEach(function (triggerEl) {
+            var tabTrigger = new bootstrap.Tab(triggerEl)
 
-        {{ range .links }}
-        <a class="list-group-item list-group-item-action" href="/text/{{ . }}"> {{ . }} </a>
-        {{ end }}
-    </div>
-
+            triggerEl.addEventListener('click', function (e) {
+                e.preventDefault()
+                tabTrigger.show()
+            })
+        });
+        document.querySelector('#myTab').children[0].children[0].classList.add('active');
+        document.querySelector('#myTabContent').children[0].classList.add('active');
+    </script>
 </body>
+
 </html>
