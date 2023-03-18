@@ -1,0 +1,2 @@
+cd Go
+go get .
