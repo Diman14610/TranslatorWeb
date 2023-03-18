@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,11 +26,10 @@ func main() {
 	if _, err := os.Stat("./web"); !os.IsNotExist(err) {
 		router.LoadHTMLGlob("web/templates/*")
 		router.GET("/", indexPage)
-		router.GET("/translate", helloPage)
 	}
 
-	router.POST("/load", handlerImg)
-	router.GET("/text/:text", handlerText)
+	router.POST("/load", handleImg)
+	router.GET("/text/:name", handleText)
 
 	router.StaticFS("/static", http.Dir("web/static"))
 	err := router.Run(Config.Host)
@@ -59,27 +57,20 @@ func CORSMiddleware() gin.HandlerFunc {
 
 func indexPage(c *gin.Context) {
 	files, err := os.ReadDir("./source/text/")
-	var texts []string
-	for _, v := range files {
-		texts = append(texts, v.Name())
+	var links []string
+	for _, f := range files {
+		links = append(links, f.Name())
 	}
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
-		"text":  "Главная страница",
-		"texts": texts,
+		"links": links,
 	})
 }
 
-func helloPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "translate.tmpl", gin.H{
-		"version": time.Now().String(),
-	})
-}
-
-func handlerImg(c *gin.Context) {
+func handleImg(c *gin.Context) {
 	// single file
 	file, _ := c.FormFile("image")
 	if !strings.HasPrefix(file.Header.Get("Content-Type"), "image") {
@@ -96,10 +87,10 @@ func handlerImg(c *gin.Context) {
 	c.Redirect(303, "/text/"+file.Filename+".txt")
 }
 
-func handlerText(c *gin.Context) {
-	t := c.Param("text")
-	contents, _ := os.ReadFile("./source/text/" + t)
+func handleText(c *gin.Context) {
+	t := c.Param("name")
+	content, _ := os.ReadFile("./source/text/" + t)
 	c.HTML(http.StatusOK, "text.tmpl", gin.H{
-		"text": string(contents),
+		"content": string(content),
 	})
 }

@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
+	"os"
 )
 
 type ConfigST struct {
@@ -17,14 +17,14 @@ var Config = loadConfig()
 
 func loadConfig() *ConfigST {
 	var cfg ConfigST
-	data, err := ioutil.ReadFile("config.json")
+	data, err := os.ReadFile("config.json")
 	if err == nil {
 		err = json.Unmarshal(data, &cfg)
 		if err != nil {
 			log.Fatalln("Config", err)
 		}
 	} else {
-		host := "8070"
+		host := ":8070"
 		trlPath := "../Python/Extractor/output/extractor/extractor.exe"
 		etrPath := "../Python/Translator/output/translator/translator.exe"
 		exe := "powershell"
